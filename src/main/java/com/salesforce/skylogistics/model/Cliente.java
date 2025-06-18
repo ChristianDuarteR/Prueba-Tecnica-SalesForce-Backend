@@ -1,5 +1,6 @@
 package com.salesforce.skylogistics.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.Id;
@@ -13,7 +14,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "clientes")
-
 public class Cliente {
 
     @jakarta.persistence.Id
@@ -24,6 +24,7 @@ public class Cliente {
     private String nombre;
     private String email;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Entrega> entregas = new ArrayList<>();
 

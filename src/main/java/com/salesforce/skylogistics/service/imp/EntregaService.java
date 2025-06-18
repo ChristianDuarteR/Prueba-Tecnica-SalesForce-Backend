@@ -1,5 +1,6 @@
 package com.salesforce.skylogistics.service.imp;
 
+import com.salesforce.skylogistics.dto.EntregaDTO;
 import com.salesforce.skylogistics.exception.ClienteNotFoundException;
 import com.salesforce.skylogistics.exception.EntregaNotFoundException;
 import com.salesforce.skylogistics.model.Cliente;
@@ -25,15 +26,16 @@ public class EntregaService implements EntregaServiceI {
     }
 
     @Override
-    public Entrega createEntrega(Long clienteId, Entrega entrega) {
+    public Entrega createEntrega(Long clienteId, EntregaDTO entrega) {
 
+        Entrega mappedEntrega = entrega.toEntity();
         Cliente cliente = clienteRepository.findById(clienteId)
                 .orElseThrow(() -> ClienteNotFoundException.porId(String.valueOf(clienteId)));
 
-        entrega.setCliente(cliente);
-        cliente.getEntregas().add(entrega);
+        mappedEntrega.setCliente(cliente);
+        cliente.getEntregas().add(mappedEntrega);
 
-        return entregaRepository.save(entrega);
+        return entregaRepository.save(mappedEntrega);
     }
 
 

@@ -7,12 +7,12 @@ import com.salesforce.skylogistics.service.ClienteServiceI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
 
-@RestController("api/v1/clientes")
+@RestController
+@RequestMapping("api/v1/clientes")
 public class ClienteController {
 
     private final ClienteServiceI clienteServiceI;
@@ -23,6 +23,7 @@ public class ClienteController {
 
     @GetMapping
     public ResponseEntity<List<Cliente>> getClientes(){
+
         try {
             List<Cliente> clientes = clienteServiceI.getClientes();
             return ResponseEntity.ok(clientes);
