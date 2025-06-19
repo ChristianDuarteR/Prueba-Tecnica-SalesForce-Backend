@@ -6,6 +6,10 @@ import com.salesforce.skylogistics.exception.EntregaInvalidDataException;
 import com.salesforce.skylogistics.exception.EntregaNotFoundException;
 import com.salesforce.skylogistics.model.Entrega;
 import com.salesforce.skylogistics.service.EntregaServiceI;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +19,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/entregas")
+@Tag(name = "Entregas", description = "Operaciones relacionadas con entregas")
 public class EntregaController {
 
     private final EntregaServiceI entregaServiceI;
@@ -23,14 +28,19 @@ public class EntregaController {
         this.entregaServiceI = entregaServiceI;
     }
 
+    @Operation(summary = "Crear entrega para un cliente")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Entrega creada exitosamente"),
+            @ApiResponse(responseCode = "400", description = "Datos de entrega inválidos"),
+            @ApiResponse(responseCode = "404", description = "Cliente no encontrado")
+    })
     @PostMapping("/clientes/{clienteId}")
-    public ResponseEntity<Void> createEntrega(@PathVariable Long clienteId,
-                                              @RequestBody EntregaDTO entrega) {
+    public ResponseEntity<Entrega> createEntrega(@PathVariable Long clienteId,
+                                                 @RequestBody EntregaDTO entrega) {
         try {
             Entrega newEntrega = entregaServiceI.createEntrega(clienteId, entrega);
             URI location = URI.create("/api/entregas/" + newEntrega.getId());
-            return ResponseEntity.created(location).build();
-
+            return ResponseEntity.created(location).body(newEntrega);
         } catch (ClienteNotFoundException e) {
             return ResponseEntity.notFound().build();
         } catch (EntregaInvalidDataException e) {
@@ -38,7 +48,11 @@ public class EntregaController {
         }
     }
 
-
+    @Operation(summary = "Obtener entregas por ID de cliente")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Entregas encontradas"),
+            @ApiResponse(responseCode = "404", description = "Cliente no encontrado")
+    })
     @GetMapping("/clientes/{clienteId}")
     public ResponseEntity<List<Entrega>> getEntregasByCliente(@PathVariable Long clienteId) {
         try {
@@ -49,6 +63,12 @@ public class EntregaController {
         }
     }
 
+    @Operation(summary = "Actualizar entrega existente")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "202", description = "Entrega actualizada"),
+            @ApiResponse(responseCode = "400", description = "Datos de entrega inválidos"),
+            @ApiResponse(responseCode = "404", description = "Entrega no encontrada")
+    })
     @PutMapping("/{entregaId}")
     public ResponseEntity<Void> updateEntrega(@PathVariable Long entregaId,
                                               @RequestBody Entrega entrega) {
@@ -63,6 +83,11 @@ public class EntregaController {
         }
     }
 
+    @Operation(summary = "Eliminar entrega por ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Entrega eliminada"),
+            @ApiResponse(responseCode = "404", description = "Entrega no encontrada")
+    })
     @DeleteMapping("/{entregaId}")
     public ResponseEntity<Void> deleteEntrega(@PathVariable Long entregaId) {
         try {
