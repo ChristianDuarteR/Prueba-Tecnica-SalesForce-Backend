@@ -19,6 +19,7 @@ public class EntregaService implements EntregaServiceI {
     private final EntregaRepository  entregaRepository;
     private final ClienteRepository  clienteRepository;
 
+
     public EntregaService(@Autowired EntregaRepository entregaRepository,
                           @Autowired ClienteRepository clienteRepository) {
         this.entregaRepository = entregaRepository;
