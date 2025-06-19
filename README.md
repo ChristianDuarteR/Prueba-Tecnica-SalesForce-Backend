@@ -10,6 +10,24 @@ Este proyecto es un backend completo para una plataforma de gestion de entregas 
 
 - **Swagger UI (documentación interactiva)**
 
+## 📁 Estructura del Proyecto
+
+```bash
+src/
+└── main/
+    ├── java/com/salesforce/skylogistics/
+    │   ├── controller/          # Controladores REST
+    │   ├── model/               # Entidades JPA (Cliente, Entrega)
+    │   ├── repository/          # Repositorios JPA (ClienteRepository, EntregaRepository)
+    │   ├── service/             # Interfaces de servicios
+    │   ├── service/imp/         # Implementaciones de servicios
+    │   └── SkyLogisticsApplication.java  # Clase principal de arranque
+    │
+    └── resources/
+        ├── application.properties       # Configuración general del proyecto
+        └── static/                      # Archivos estáticos si se requieren
+```
+
 ## Funcionalidades principales
 
 🛍️ CRUD de Clientes
